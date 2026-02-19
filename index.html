@@ -1,0 +1,1817 @@
+<!DOCTYPE html><html lang="en"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yassmine — AI Multi-Agent Customer Specialist</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<style>
+:root {
+  --navy-deep: #0C1117;
+  --navy: #111920;
+  --navy-mid: #18222D;
+  --navy-light: #1F2D3A;
+  --green: #3DAE56;
+  --green-bright: #4CC968;
+  --green-glow: rgba(61,174,86,0.35);
+  --green-dark: #2D8A42;
+  --charcoal: #2D2D2D;
+  --white: #FFFFFF;
+  --off-white: #F4F6F5;
+  --gray-100: #E2E8E4;
+  --gray-300: #A0AEA5;
+  --gray-500: #64756A;
+  --success: #3DAE56;
+  --warning: #E5A100;
+  --danger: #E03B5C;
+  --font-display: 'Inter', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  font-family: var(--font-body);
+  background: var(--navy-deep);
+  color: var(--white);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== SLIDE SYSTEM ===== */
+.deck { position: relative; width: 100%; height: 100%; }
+
+.slide {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.65s cubic-bezier(0.22,1,0.36,1), transform 0.65s cubic-bezier(0.22,1,0.36,1);
+  transform: scale(0.97);
+  overflow: hidden;
+  padding: 2rem;
+}
+.slide.active {
+  opacity: 1; pointer-events: auto; transform: scale(1); z-index: 2;
+}
+
+.slide-inner {
+  width: 100%; max-width: 1200px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; position: relative; z-index: 2;
+}
+
+/* ===== BACKGROUNDS ===== */
+.bg-navy { background: var(--navy-deep); }
+.bg-navy-grad {
+  background: linear-gradient(160deg, var(--navy-deep) 0%, var(--navy) 40%, var(--navy-mid) 100%);
+}
+.bg-white { background: var(--off-white); color: var(--charcoal); }
+.bg-dark-drama {
+  background: linear-gradient(180deg, #000 0%, #080C10 50%, var(--navy-deep) 100%);
+}
+
+.grid-bg::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(61,174,86,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(61,174,86,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+.mesh-bg::after {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 600px 400px at 20% 30%, rgba(61,174,86,0.08), transparent),
+    radial-gradient(ellipse 500px 500px at 80% 70%, rgba(45,138,66,0.06), transparent);
+  pointer-events: none;
+}
+
+/* ===== TYPOGRAPHY ===== */
+.t-display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+.t-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.15;
+}
+.t-sub {
+  font-family: var(--font-body);
+  font-weight: 400;
+  color: var(--gray-300);
+  line-height: 1.5;
+}
+.t-sub-dark { color: var(--gray-500); }
+
+.text-hero { font-size: clamp(3.2rem, 7vw, 6rem); font-weight: 800; }
+.text-xxl { font-size: clamp(2.4rem, 5vw, 4rem); font-weight: 700; }
+.text-xl { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 600; }
+.text-lg { font-size: clamp(1.2rem, 2.5vw, 1.6rem); font-weight: 500; }
+.text-md { font-size: clamp(1rem, 1.8vw, 1.25rem); }
+.text-sm { font-size: clamp(0.9rem, 1.4vw, 1.05rem); }
+.text-stat { font-size: clamp(4rem, 12vw, 9rem); font-weight: 800; }
+
+.text-green { color: var(--green); }
+.text-glow { text-shadow: 0 0 40px var(--green-glow), 0 0 80px rgba(61,174,86,0.15); }
+.text-white { color: var(--white); }
+
+/* ===== ANIM SYSTEM ===== */
+[data-a] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: none;
+}
+.slide.active [data-a] {
+  animation: fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+.slide.active [data-a="1"] { animation-delay: 0.08s; }
+.slide.active [data-a="2"] { animation-delay: 0.18s; }
+.slide.active [data-a="3"] { animation-delay: 0.3s; }
+.slide.active [data-a="4"] { animation-delay: 0.42s; }
+.slide.active [data-a="5"] { animation-delay: 0.54s; }
+.slide.active [data-a="6"] { animation-delay: 0.66s; }
+.slide.active [data-a="7"] { animation-delay: 0.78s; }
+.slide.active [data-a="8"] { animation-delay: 0.9s; }
+
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse { 0%,100%{ opacity:0.4; } 50%{ opacity:1; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spinReverse { to { transform: rotate(-360deg); } }
+@keyframes dash { to { stroke-dashoffset: -20; } }
+@keyframes growWidth { from { width: 0; } }
+@keyframes growHeight { from { height: 0; } }
+@keyframes scaleIn { from { transform: scale(0); opacity:0; } to { transform: scale(1); opacity:1; } }
+@keyframes float {
+  0%,100% { transform: translateY(0) translateX(0); }
+  25% { transform: translateY(-15px) translateX(8px); }
+  50% { transform: translateY(-5px) translateX(-5px); }
+  75% { transform: translateY(-20px) translateX(3px); }
+}
+
+/* ===== COMPONENTS ===== */
+.chip {
+  display: inline-block;
+  padding: 0.35rem 1rem;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  background: rgba(61,174,86,0.12);
+  color: var(--green);
+  border: 1px solid rgba(61,174,86,0.2);
+}
+
+.divider {
+  width: 60px; height: 3px;
+  background: linear-gradient(90deg, var(--green), var(--green-bright));
+  border-radius: 2px;
+  margin: 1rem auto;
+}
+
+.icon-circle {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem;
+  background: rgba(61,174,86,0.1);
+  color: var(--green);
+  border: 1px solid rgba(61,174,86,0.15);
+  flex-shrink: 0;
+}
+.icon-circle-dark {
+  background: rgba(61,174,86,0.08);
+  border-color: rgba(61,174,86,0.12);
+}
+.icon-circle-white {
+  background: rgba(45,138,66,0.06);
+  color: var(--green-dark);
+  border-color: rgba(45,138,66,0.1);
+}
+
+.card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 1.5rem;
+  backdrop-filter: blur(8px);
+}
+.card-white {
+  background: var(--white);
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+  color: var(--charcoal);
+}
+
+.stat-box {
+  display: flex; flex-direction: column; align-items: center; gap: 0.25rem;
+}
+
+/* Grid layouts */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; width: 100%; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; width: 100%; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; width: 100%; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.flex-col { flex-direction: column; }
+.gap-05 { gap: 0.5rem; }
+.gap-1 { gap: 1rem; }
+.gap-2 { gap: 2rem; }
+.gap-3 { gap: 3rem; }
+.mt-1 { margin-top: 1rem; }
+.mt-2 { margin-top: 2rem; }
+.mb-1 { margin-bottom: 1rem; }
+.w-full { width: 100%; }
+
+/* ===== AI BRAIN VISUAL ===== */
+.ai-brain {
+  position: relative;
+  width: 220px; height: 220px;
+}
+.ai-brain .ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid rgba(61,174,86,0.15);
+}
+.ai-brain .ring-1 {
+  inset: 0;
+  animation: spin 25s linear infinite;
+  border-style: dashed;
+}
+.ai-brain .ring-2 {
+  inset: 25px;
+  animation: spinReverse 18s linear infinite;
+  border-color: rgba(61,174,86,0.25);
+}
+.ai-brain .ring-3 {
+  inset: 50px;
+  animation: spin 12s linear infinite;
+  border-style: dashed;
+  border-color: rgba(61,174,86,0.35);
+}
+.ai-brain .core {
+  position: absolute; inset: 70px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--green) 0%, rgba(61,174,86,0.2) 70%, transparent 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; color: var(--white);
+  box-shadow: 0 0 40px var(--green-glow), 0 0 80px rgba(61,174,86,0.1);
+}
+.ai-brain .node {
+  position: absolute;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green-glow);
+}
+
+/* ===== CHART STYLES ===== */
+.chart-container { width: 100%; max-width: 700px; margin: 0 auto; }
+.chart-container svg { width: 100%; height: auto; }
+
+.bar-animated {
+  transition: height 1s cubic-bezier(0.22,1,0.36,1), y 1s cubic-bezier(0.22,1,0.36,1);
+}
+
+.gauge-arc {
+  transition: stroke-dasharray 1.5s cubic-bezier(0.22,1,0.36,1);
+}
+
+.pie-segment {
+  transition: stroke-dasharray 1.2s cubic-bezier(0.22,1,0.36,1);
+}
+
+.exp-line {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  transition: stroke-dashoffset 2s cubic-bezier(0.22,1,0.36,1);
+}
+.slide.active .exp-line { stroke-dashoffset: 0; }
+
+/* ===== FUNNEL ===== */
+.funnel { width: 100%; max-width: 420px; margin: 0 auto; }
+.funnel-step {
+  height: 52px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--white);
+  font-weight: 700;
+  font-size: clamp(0.75rem, 1.2vw, 0.95rem);
+  clip-path: polygon(0 0, 100% 0, calc(100% - 12px) 100%, 12px 100%);
+  transition: width 1s cubic-bezier(0.22,1,0.36,1);
+  margin: 0 auto;
+}
+
+/* ===== TIMELINE ===== */
+.timeline-h {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  position: relative; width: 100%; padding-top: 2rem;
+}
+.timeline-h::before {
+  content: ''; position: absolute; top: 0; left: 5%; right: 5%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--green), var(--green-bright));
+  border-radius: 2px;
+}
+.timeline-node {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 0.5rem; flex: 1; position: relative;
+}
+.timeline-dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 10px var(--green-glow);
+  position: absolute; top: -2rem; transform: translateY(-50%);
+}
+
+/* ===== PROCESS BAR ===== */
+.process-bar {
+  display: flex; align-items: center; gap: 0;
+  width: 100%; overflow-x: auto;
+}
+.process-step {
+  flex: 1; min-width: 100px;
+  padding: 0.6rem 0.5rem;
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  position: relative;
+  color: var(--white);
+  background: rgba(61,174,86,0.08);
+  border: 1px solid rgba(61,174,86,0.15);
+}
+.process-step:first-child { border-radius: 8px 0 0 8px; }
+.process-step:last-child { border-radius: 0 8px 8px 0; }
+.process-step + .process-step { border-left: none; }
+.process-step i { display: block; font-size: 1.1rem; color: var(--green); margin-bottom: 0.3rem; }
+
+/* ===== NAV ===== */
+.nav-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  height: 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 1.5rem;
+  z-index: 100;
+  background: rgba(12,17,23,0.9);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+.nav-btn {
+  background: none; border: none;
+  color: rgba(255,255,255,0.5);
+  font-size: 1.1rem; cursor: pointer;
+  padding: 0.5rem;
+  transition: color 0.2s;
+}
+.nav-btn:hover { color: var(--green); }
+.nav-counter {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.4);
+  font-weight: 500;
+}
+.progress-track {
+  position: fixed; bottom: 48px; left: 0; right: 0;
+  height: 2px; background: rgba(255,255,255,0.05); z-index: 100;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green), var(--green-bright));
+  transition: width 0.4s ease;
+  border-radius: 0 2px 2px 0;
+}
+
+/* ===== PARTICLES ===== */
+.particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.particle {
+  position: absolute;
+  width: 3px; height: 3px;
+  background: var(--green);
+  border-radius: 50%;
+  opacity: 0.3;
+}
+
+/* ===== LOGO CARD ===== */
+.logo-card {
+  background: var(--white);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 14px;
+  padding: 1.5rem 1rem;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 0.75rem;
+  min-height: 110px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.logo-card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+.logo-card .logo-icon {
+  width: 44px; height: 44px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
+}
+.logo-card .logo-name {
+  font-weight: 700; font-size: 0.8rem; color: var(--charcoal);
+  text-align: center; line-height: 1.3;
+}
+
+/* ===== AGENT NETWORK ===== */
+.agent-network { position: relative; width: 340px; height: 340px; margin: 0 auto; }
+.agent-network .center-node {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--green), var(--green-dark));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; color: var(--white);
+  box-shadow: 0 0 40px var(--green-glow);
+  z-index: 3;
+}
+.agent-network .agent-node {
+  position: absolute;
+  width: 42px; height: 42px; border-radius: 50%;
+  background: rgba(61,174,86,0.12);
+  border: 1.5px solid rgba(61,174,86,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; color: var(--green);
+  z-index: 3;
+}
+.agent-network svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.network-line {
+  stroke: rgba(61,174,86,0.2);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+  animation: dash 3s linear infinite;
+}
+
+/* ===== CHANNEL ICONS ===== */
+.channel-card {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 0.6rem;
+  padding: 1.2rem 0.8rem;
+  background: rgba(61,174,86,0.05);
+  border: 1px solid rgba(61,174,86,0.1);
+  border-radius: 14px;
+  transition: background 0.3s, border-color 0.3s;
+}
+.channel-card:hover {
+  background: rgba(61,174,86,0.1);
+  border-color: rgba(61,174,86,0.25);
+}
+.channel-card i { font-size: 1.6rem; color: var(--green); }
+.channel-card span { font-size: 0.78rem; font-weight: 500; color: var(--gray-300); }
+
+/* ===== COMPARISON BARS ===== */
+.compare-row {
+  display: flex; align-items: center; gap: 1rem; width: 100%;
+}
+.compare-label {
+  width: 100px; text-align: right;
+  font-size: 0.85rem; font-weight: 700; flex-shrink: 0;
+}
+.compare-track {
+  flex: 1; height: 36px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 8px; overflow: hidden;
+  position: relative;
+}
+.compare-fill {
+  height: 100%;
+  border-radius: 8px;
+  display: flex; align-items: center;
+  padding: 0 0.75rem;
+  font-size: 0.8rem; font-weight: 700;
+  color: var(--white);
+  transition: width 1.2s cubic-bezier(0.22,1,0.36,1);
+}
+
+/* ===== MOCKUP ===== */
+.mockup-frame {
+  background: var(--navy-mid);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 1rem;
+  width: 100%;
+  max-width: 540px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.mockup-topbar {
+  display: flex; align-items: center; gap: 0.5rem;
+  margin-bottom: 1rem; padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.mockup-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+.mockup-content {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;
+}
+.mockup-card {
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+  padding: 0.8rem;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+.mockup-card-title {
+  font-size: 0.6rem; color: var(--gray-500);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  margin-bottom: 0.4rem;
+}
+.mockup-card-value {
+  font-size: 1.1rem; font-weight: 700;
+  font-family: var(--font-display);
+}
+
+/* ===== WARNING BADGES ===== */
+.warn-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem; font-weight: 700;
+}
+.warn-badge.red { background: rgba(224,59,92,0.1); color: var(--danger); border: 1px solid rgba(224,59,92,0.15); }
+.warn-badge.yellow { background: rgba(229,161,0,0.1); color: var(--warning); border: 1px solid rgba(229,161,0,0.15); }
+
+/* ===== MS BADGE ===== */
+.ms-badge {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(61,174,86,0.2);
+  border-radius: 8px;
+  background: rgba(61,174,86,0.05);
+}
+.ms-logo {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+  width: 16px; height: 16px;
+}
+.ms-logo span { border-radius: 1px; }
+
+/* ===== LOGO IMAGES ===== */
+.brand-logo {
+  height: 60px;
+  width: auto;
+  object-fit: contain;
+}
+.brand-logo-sm {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+.brand-logo-lg {
+  height: 80px;
+  width: auto;
+  object-fit: contain;
+}
+.brand-logo-round {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .slide { padding: 1.5rem 1rem 4rem; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { gap: 0.75rem; }
+  .ai-brain { width: 160px; height: 160px; }
+  .ai-brain .ring-2 { inset: 18px; }
+  .ai-brain .ring-3 { inset: 36px; }
+  .ai-brain .core { inset: 50px; font-size: 1.5rem; }
+  .agent-network { width: 260px; height: 260px; }
+  .mockup-frame { max-width: 100%; }
+  .process-bar { flex-wrap: wrap; }
+  .process-step { min-width: 80px; font-size: 0.6rem; }
+  .compare-label { width: 70px; font-size: 0.75rem; }
+  .timeline-h { flex-wrap: wrap; gap: 1rem; }
+  .timeline-h::before { display: none; }
+}
+@media (max-width: 480px) {
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .text-hero { font-size: 2.2rem; }
+  .text-stat { font-size: 3rem; }
+  .nav-bar { padding: 0 0.75rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+<!-- ===================== SLIDE 0: COVER ===================== -->
+<section class="slide bg-navy-grad grid-bg mesh-bg active" id="slide-0">
+  <div class="particles" id="particles-cover"></div>
+  <div class="slide-inner" style="gap: 1.5rem;">
+    <div data-a="1" class="flex-center gap-2" style="flex-wrap:wrap;">
+      <img src="https://pfst.cf2.poecdn.net/base/image/bbee76bdc2fbefe41e1034f78928b625efaf9097202c07e0f81efe7562db4507?w=904&amp;h=659" alt="EasyBank" class="brand-logo-sm" style="height:36px;">
+      <span style="color:var(--green);font-size:1.2rem;font-weight:700;">×</span>
+      <img src="https://pfst.cf2.poecdn.net/base/image/19a90275158dd607a734a01009e0d525f6a67516991207f72d4d7f133ce37262?w=121&amp;h=113" alt="Solugent" style="height:36px;width:36px;border-radius:50%;">
+      <span style="color:var(--gray-300);font-weight:700;font-size:0.9rem;">Solugent</span>
+    </div>
+    <div data-a="2" class="ai-brain">
+      <div class="ring ring-1"></div>
+      <div class="ring ring-2"></div>
+      <div class="ring ring-3"></div>
+      <div class="core"><i class="fas fa-brain"></i></div>
+      <div class="node" style="top:5%;left:50%;"></div>
+      <div class="node" style="top:50%;right:2%;"></div>
+      <div class="node" style="bottom:8%;left:35%;"></div>
+      <div class="node" style="top:25%;left:5%;"></div>
+      <div class="node" style="bottom:20%;right:10%;"></div>
+    </div>
+    <h1 data-a="3" class="t-display text-hero text-glow">Yassmine</h1>
+    <p data-a="4" class="t-title text-lg" style="color:var(--gray-100);">The AI Multi-Agent Customer Specialist</p>
+    <div data-a="5" class="divider"></div>
+    <p data-a="6" class="t-sub text-md" style="font-style:italic;">"AI Intelligence meets Financial Intelligence"</p>
+  </div>
+</section>
+
+<!-- ===================== SLIDE 1: WHAT IS YASSMINE ===================== -->
+<section class="slide bg-navy-grad grid-bg" id="slide-1">
+  <div class="slide-inner" style="gap:2rem;">
+    <div data-a="1" class="chip">Chapter 1 — Introducing Yassmine</div>
+    <h2 data-a="2" class="t-display text-xxl">What is <span class="text-green">Yassmine</span>?</h2>
+    <div data-a="3" class="flex-center gap-2" style="flex-wrap:wrap; margin-top:1rem;">
+      <div class="card" style="max-width:260px; padding:2rem;">
+        <div style="font-size:2.5rem; margin-bottom:0.75rem;"><i class="fas fa-comment-slash" style="color:var(--danger);opacity:0.7;"></i></div>
+        <p class="t-title text-lg" style="text-decoration:line-through; opacity:0.5;">Not a chatbot.</p>
+      </div>
+      <div style="font-size:2rem; color:var(--green);"><i class="fas fa-arrow-right"></i></div>
+      <div class="card" style="max-width:320px; padding:2rem; border-color:rgba(61,174,86,0.2); background:rgba(61,174,86,0.05);">
+        <div style="font-size:2.5rem; margin-bottom:0.75rem;"><i class="fas fa-network-wired" style="color:var(--green);"></i></div>
+        <p class="t-title text-lg">A Multi-Agent AI<br>Customer Specialist.</p>
+      </div>
+    </div>
+    <div data-a="4" class="flex-center gap-3 mt-2" style="flex-wrap:wrap;">
+      <div class="flex-center gap-05"><div class="icon-circle" style="width:40px;height:40px;font-size:0.9rem;"><i class="fas fa-robot"></i></div><span class="text-sm" style="color:var(--gray-300);">AI Agents</span></div>
+      <div style="color:var(--green);">+</div>
+      <div class="flex-center gap-05"><div class="icon-circle" style="width:40px;height:40px;font-size:0.9rem;"><i class="fas fa-user-tie"></i></div><span class="text-sm" style="color:var(--gray-300);">Human Experts</span></div>
+      <div style="color:var(--green);">=</div>
+      <div class="flex-center gap-05"><div class="icon-circle" style="width:40px;height:40px;font-size:0.9rem;background:rgba(61,174,86,0.15);color:var(--green);border-color:rgba(61,174,86,0.25);"><i class="fas fa-bolt"></i></div><span class="text-sm" style="color:var(--gray-300);">Supercharged</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SLIDE 2: STRATEGIC COLLABORATION ===================== -->
+<section class="slide bg-navy-grad" id="slide-2">
+  <div class="slide-inner" style="gap:2rem;">
+    <h2 data-a="1" class="t-display text-xxl">Strategic Collaboration</h2>
+    <div data-a="2" class="grid-3 mt-1" style="max-width:900px; align-items:center;">
+      <div class="card" style="text-align:center; padding:2rem 1rem;">
+        <img src="https://pfst.cf2.poecdn.net/base/image/19a90275158dd607a734a01009e0d525f6a67516991207f72d4d7f133ce37262?w=121&amp;h=113" alt="Solugent" style="width:64px;height:64px;border-radius:50%;margin:0 auto 0.75rem;">
+        <h3 class="t-title text-lg mb-1">Solugent</h3>
+        <p class="text-sm" style="color:var(--gray-300);">AI Intelligence</p>
+      </div>
+      <div style="text-align:center;">
+        <div class="ai-brain" style="width:140px; height:140px; margin:0 auto;">
+          <div class="ring ring-1"></div>
+          <div class="ring ring-2" style="inset:16px;"></div>
+          <div class="ring ring-3" style="inset:32px;"></div>
+          <div class="core" style="inset:46px; font-size:1.3rem;"><i class="fas fa-brain"></i></div>
+        </div>
+        <h3 class="t-title text-lg text-green mt-1">Yassmine</h3>
+      </div>
+      <div class="card" style="text-align:center; padding:2rem 1rem;">
+        <img src="https://pfst.cf2.poecdn.net/base/image/bbee76bdc2fbefe41e1034f78928b625efaf9097202c07e0f81efe7562db4507?w=904&amp;h=659" alt="EasyBank" style="height:48px;width:auto;object-fit:contain;margin:0 auto 0.75rem;display:block;">
+        <h3 class="t-title text-lg mb-1">EasyBank</h3>
+        <p class="text-sm" style="color:var(--gray-300);">Financial Intelligence</p>
+      </div>
+    </div>
+    <div data-a="3" class="flex-center gap-2 mt-1" style="flex-wrap:wrap;">
+      <span class="chip" style="background:rgba(61,174,86,0.08);">Solugent → AI</span>
+      <span style="color:var(--green);font-size:1.2rem;">+</span>
+      <span class="chip" style="background:rgba(61,174,86,0.08);">EasyBank → Finance</span>
+      <span style="color:var(--green);font-size:1.2rem;">=</span>
+      <span class="chip" style="background:rgba(61,174,86,0.15);border-color:rgba(61,174,86,0.35);">Yassmine</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SLIDE 3: SOLUGENT ===================== -->
+<section class="slide bg-navy-grad grid-bg" id="slide-3">
+  <div class="slide-inner" style="gap:1.5rem;">
+    <div data-a="1" class="chip">Partner Profile</div>
+    <img data-a="2" src="https://pfst.cf2.poecdn.net/base/image/19a90275158dd607a734a01009e0d525f6a67516991207f72d4d7f133ce37262?w=121&amp;h=113" alt="Solugent" style="width:72px;height:72px;border-radius:50%;">
+    <h2 data-a="2" class="t-display text-xl">Solugent</h2>
+    <p data-a="3" class="t-sub text-md">AI Solution Provider for Intelligent Business Automation</p>
+    <div data-a="4" class="grid-4 mt-2" style="max-width:700px;">
+      <div class="flex-center flex-col gap-05">
+        <div class="icon-circle"><i class="fas fa-file-contract"></i></div>
+        <span class="text-sm" style="color:var(--gray-300);">AI Tender<br>Management</span>
+      </div>
+      <div class="flex-center flex-col gap-05">
+        <div class="icon-circle"><i class="fas fa-boxes-stacked"></i></div>
+        <span class="text-sm" style="color:var(--gray-300);">Procurement<br>Automation</span>
+      </div>
+      <div class="flex-center flex-col gap-05">
+        <div class="icon-circle"><i class="fas fa-wand-magic-sparkles"></i></div>
+        <span class="text-sm" style="color:var(--gray-300);">Custom AI<br>Solutions</span>
+      </div>
+      <div class="flex-center flex-col gap-05">
+        <div class="icon-circle"><i class="fas fa-plug"></i></div>
+        <span class="text-sm" style="color:var(--gray-300);">Enterprise<br>Integration</span>
+      </div>
+    </div>
+    <div data-a="5" class="process-bar mt-2" style="max-width:750px;">
+      <div class="process-step"><i class="fas fa-comments"></i>Consulting</div>
+      <div class="process-step"><i class="fas fa-pencil-ruler"></i>Design</div>
+      <div class="process-step"><i class="fas fa-code"></i>Development</div>
+      <div class="process-step"><i class="fas fa-flask-vial"></i>Testing</div>
+      <div class="process-step"><i class="fas fa-rocket"></i>Deployment</div>
+      <div class="process-step"><i class="fas fa-chart-line"></i>Optimization</div>
+    </div>
+    <div data-a="6" class="ms-badge mt-1">
+      <div class="ms-logo">
+        <span style="background:#F25022;"></span>
+        <span style="background:#7FBA00;"></span>
+        <span style="background:#00A4EF;"></span>
+        <span style="background:#FFB900;"></span>
+      </div>
+      <span class="text-sm" style="color:var(--gray-300);">Microsoft for Startups</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SLIDE 4: TRUSTED BY ===================== -->
+<section class="slide bg-white" id="slide-4">
+  <div class="slide-inner" style="gap:2rem;">
+    <div data-a="1" class="chip" style="background:rgba(45,138,66,0.06);color:var(--green-dark);border-color:rgba(45,138,66,0.12);">Trust &amp; Credibility</div>
+    <h2 data-a="2" class="t-display text-xxl" style="color:var(--charcoal);">Trusted By</h2>
+    <p data-a="3" class="t-sub t-sub-dark text-md" style="max-width:700px; text-align:center;">Official partnerships with government institutions across Qatar and Tunisia</p>
+    <div data-a="4" class="grid-4 mt-1" style="max-width:900px; align-items:center;">
+      <div class="logo-card" style="padding:1rem;">
+        <img src="/Users/taha/Downloads/qatar_cult.png" alt="Ministry of Culture Qatar" style="max-height:70px; width:auto; object-fit:contain;">
+        <span class="logo-name" style="font-size:0.75rem;">Ministry of Culture<br>State of Qatar</span>
+      </div>
+      <div class="logo-card" style="padding:1rem;">
+        <img src="/Users/taha/Downloads/qna_ministry-of-justice_26-09-20.png" alt="Ministry of Justice Qatar" style="max-height:70px; width:auto; object-fit:contain;">
+        <span class="logo-name" style="font-size:0.75rem;">Ministry of Justice<br>State of Qatar</span>
+      </div>
+      <div class="logo-card" style="padding:1rem;">
+        <img src="/Users/taha/Downloads/960px-Amiri_diwan_qatar_logo.svg.png" alt="The Amiri Diwan Qatar" style="max-height:70px; width:auto; object-fit:contain;">
+        <span class="logo-name" style="font-size:0.75rem;">The Amiri Diwan<br>State of Qatar</span>
+      </div>
+      <div class="logo-card" style="padding:1rem;">
+        <img src="/Users/taha/Downloads/rne.png" alt="Registre National des Entreprises Tunisia" style="max-height:70px; width:auto; object-fit:contain;">
+        <span class="logo-name" style="font-size:0.75rem;">Registre National<br>des Entreprises Tunisia</span>
+      </div>
+    </div>
+    <div data-a="5" class="card" style="border-color:rgba(45,138,66,0.2); background:rgba(45,138,66,0.04); max-width:800px; padding:1rem 2rem;">
+      <p class="t-title text-md" style="color:var(--green-dark);"><i class="fas fa-shield-check"></i> Trusted by High-Level Government Institutions — Proven Enterprise Reliability</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SLIDE 5: EASYBANK ===================== -->
+<section class="slide bg-navy-grad grid-bg" id="slide-5">
+  <div class="slide-inner" style="gap:1.5rem;">
+    <div data-a="1" class="chip">Partner Profile</div>
+    <img data-a="2" src="https://pfst.cf2.poecdn.net/base/image/bbee76bdc2fbefe41e1034f78928b625efaf9097202c07e0f81efe7562db4507?w=904&amp;h=659" alt="EasyBank" style="height:72px;width:auto;object-fit:contain;">
+    <h2 data-a="2" class="t-display text-xl">EasyBank</h2>
+    <div data-a="3" class="flex-center gap-2 mt-1" style="flex-wrap:wrap;">
+      <span class="chip">Financial Brokerage Expert</span>
+      <span class="chip" style="background:rgba(61,174,86,0.12);color:var(--green);border-color:rgba(61,174,86,0.25);">Startup Label Accredited</span>
+      <span class="chip">AI-Driven Loan Advisory</span>
+    </div>
+    <div data-a="4" class="mockup-frame mt-2">
+      <div class="mockup-topbar">
+        <div class="mockup-dot" style="background:#E03B5C;"></div>
+        <div class="mockup-dot" style="background:#E5A100;"></div>
+        <div class="mockup-dot" style="background:#3DAE56;"></div>
+        <span style="margin-left:auto;font-size:0.65rem;color:var(--gray-500);">EasyBank Dashboard</span>
+      </div>
+      <div class="mockup-content">
+        <div class="mockup-card">
+          <div class="mockup-card-title">Loan Intermediary</div>
+          <div class="mockup-card-value text-green"><i class="fas fa-handshake" style="font-size:1.5rem;"></i></div>
+        </div>
+        <div class="mockup-card">
+          <div class="mockup-card-title">Negotiation</div>
+          <div class="mockup-card-value text-green"><i class="fas fa-gavel" style="font-size:1.5rem;"></i></div>
+        </div>
+        <div class="mockup-card">
+          <div class="mockup-card-title">Financial Consulting</div>
+          <div class="mockup-card-value text-green"><i class="fas fa-chart-pie" style="font-size:1.5rem;"></i></div>
+        </div>
+        <div class="mockup-card">
+          <div class="mockup-card-title">Extra Services</div>
+          <div class="mockup-card-value text-green"><i class="fas fa-plus-circle" style="font-size:1.5rem;"></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SLIDE 6: THE PROBLEM ===================== -->
+<section class="slide bg-dark-drama" id="slide-6">
+  <div class="slide-inner" style="gap:2rem;">
+    <div data-a="1" class="chip" style="background:rgba(224,59,92,0.1);color:var(--danger);border-color:rgba(224,59,92,0.2);">Chapter 2 — Why This Product Exists</div>
+    <div data-a="2" style="font-size:5rem; opacity:0.15; position:absolute; top:15%; right:10%;">
+      <i class="fas fa-inbox"></i>
+    </div>
+    <h2 data-a="3" class="t-display text-hero">
+      Too many leads.<br>
+      <span style="color:var(--danger);">Too little time.</span>
+    </h2>
+    <div data-a="4" class="flex-center gap-3 mt-2" style="flex-wrap:wrap;">
+      <div class="stat-box">
+        <span class="t-display" style="font-size:clamp(2rem,5vw,3.5rem);color:var(--warning);">∞</span>
+        <span class="text-sm" style="color:var(--gray-300);">Incoming Leads</span>
+      </div>
+      <div style="font-size:1.5rem;color:var(--danger);">×</div>
+      <div class="stat-box">
+        <span class="t-display" style="font-size:clamp(2rem,5vw,3.5rem);color:var(--danger);">24h</span>
+        <span class="text-sm" style="color:var(--gray-300);">Limited Hours</span>
+      </div>
+      <div style="font-size:1.5rem;color:var(--danger);">=</div>
+      <div class="stat-box">
+        <span class="t-display" style="font-size:clamp(2rem,5vw,3.5rem);color:var(--danger);">💸</span>
+        <span class="text-sm" style="color:var(--gray-300);">Lost Revenue</span>
+      </div>
+    </div>
+    <div data-a="5" class="grid-3" style="max-width:760px;gap:1rem;">
+      <div class="card" style="padding:1rem;text-align:center;background:rgba(224,59,92,0.08);border-color:rgba(224,59,92,0.18);">
+        <p class="t-display" style="font-size:clamp(1.8rem,4vw,2.6rem);color:var(--danger);">30%</p>
+        <p class="text-sm" style="color:var(--gray-300);">Leads not answered<br>within 10 minutes</p>
+      </div>
+      <div class="card" style="padding:1rem;text-align:center;background:rgba(229,161,0,0.08);border-color:rgba(229,161,0,0.2);">
+        <p class="t-display" style="font-size:clamp(1.8rem,4vw,2.6rem);color:var(--warning);">2-6h</p>
+        <p class="text-sm" style="color:var(--gray-300);">Average human<br>response delay</p>
+      </div>
+      <div class="card" style="padding:1rem;text-align:center;background:rgba(224,59,92,0.08);border-color:rgba(224,59,92,0.18);">
+        <p class="t-display" style="font-size:clamp(1.8rem,4vw,2.6rem);color:var(--danger);">40%</p>
+        <p class="text-sm" style="color:var(--gray-300);">Drop-off after<br>1 hour waiting</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SLIDE 7: PROBLEM 1 ===================== -->
+<section class="slide bg-navy-grad" id="slide-7">
+  <div class="slide-inner" style="gap:1.5rem;">
+    <h2 data-a="1" class="t-display text-xl">Missing Qualified Leads</h2>
+    <div data-a="2" class="funnel mt-2" id="funnel-problem">
+      <div class="funnel-step" style="width:100%;background:linear-gradient(90deg,var(--green),var(--green-dark));">
+        <span>High-Speed Inflow</span>
+      </div>
+      <div class="funnel-step" style="width:72%;background:linear-gradient(90deg,var(--warning),#cc8800);margin-top:4px;">
+        <span>Delayed Responses</span>
+      </div>
+      <div class="funnel-step" style="width:38%;background:linear-gradient(90deg,var(--danger),#b01134);margin-top:4px;">
+        <span>Lost Opportunities</span>
+      </div>
+    </div>
+    <div data-a="3" class="flex-center gap-1 mt-2" style="flex-wrap:wrap;">
+      <div class="warn-badge yellow"><i class="fas fa-clock"></i> Slow follow-up</div>
+      <div class="warn-badge red"><i class="fas fa-user-slash"></i> Leads drop off</div>
+      <div class="warn-badge red"><i class="fas fa-dollar-sign"></i> Revenue loss</div>
+    </div>
+    <div data-a="4" class="mt-2">
+      <p class="t-display text-xl text-green">Speed = Revenue</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SLIDE 8: PROBLEM 2 ===================== -->
+<section class="slide bg-navy-grad" id="slide-8">
+  <div class="slide-inner" style="gap:1.5rem;">
+    <h2 data-a="1" class="t-display text-xl">Time Wasted on Low-Value Tasks</h2>
+    <div data-a="2" class="grid-2 mt-2" style="max-width:700px;">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:2.5rem;color:var(--warning);margin-bottom:0.75rem;"><i class="fas fa-user-clock"></i></div>
+        <p class="t-title text-md">Human Agent<br>Overwhelmed</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:2.5rem;color:var(--danger);opacity:0.8;margin-bottom:0.75rem;"><i class="fas fa-repeat"></i></div>
+        <p class="t-title text-md">Repetitive<br>Low-Value Tasks</p>
+      </div>
+    </div>
+    <div data-a="3" class="flex-center gap-2 mt-2" style="flex-wrap:wrap;">
+      <div class="flex-center gap-05"><i class="fas fa-file-circle-xmark" style="color:var(--warning);"></i><span class="text-sm" style="color:var(--gray-300);">Incomplete files</span></div>
+      <div class="flex-center gap-05"><i class="fas fa-ban" style="color:var(--danger);"></i><span class="text-sm" style="color:var(--gray-300);">Ineligible profiles</span></div>
+      <div class="flex-center gap-05"><i class="fas fa-circle-question" style="color:var(--gray-500);"></i><span class="text-sm" style="color:var(--gray-300);">Basic questions</span></div>
+    </div>
+    <div data-a="4" class="flex-center gap-1 mt-2" style="flex-wrap:wrap;">
+      <div class="warn-badge yellow"><i class="fas fa-triangle-exclamation"></i> Operational inefficiency</div>
+      <div class="warn-badge red"><i class="fas fa-triangle-exclamation"></i> Frustrated teams</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SLIDE 9: ALL-IN-ONE ONBOARDING ===================== -->
+<section class="slide bg-navy-grad grid-bg mesh-bg" id="slide-9">
+  <div class="slide-inner" style="gap:1.5rem;">
+    <div data-a="1" class="chip">Chapter 3 — What Yassmine Delivers</div>
+    <h2 data-a="2" class="t-display text-xl">All-in-One Intelligent Onboarding</h2>
+    <div data-a="3" style="position:relative; margin-top:1rem;">
+      <div class="ai-brain" style="width:120px;height:120px;margin:0 auto;">
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2" style="inset:14px;"></div>
+        <div class="core" style="inset:32px;font-size:1.4rem;"><i class="fas fa-brain"></i></div>
+      </div>
+    </div>
+    <div data-a="4" class="grid-3 mt-2" style="max-width:750px;">
+      <div class="flex-center flex-col gap-05">
+        <div class="icon-circle"><i class="fas fa-bolt"></i></div>
+        <span class="text-sm" style="color:var(--gray-300);">Instant Response</span>
+      </div>
+      <div class="flex-center flex-col gap-05">
+        <div class="icon-circle"><i class="fas fa-comments"></i></div>
+        <span class="text-sm" style="color:var(--gray-300);">Full Conversation</span>
+      </div>
+      <div class="flex-center flex-col gap-05">
+        <div class="icon-circle"><i class="fas fa-clipboard-check"></i></div>
+        <span class="text-sm" style="color:var(--gray-300);">Qualification</span>
+      </div>
+      <div class="flex-center flex-col gap-05">
+        <div class="icon-circle"><i class="fas fa-star-half-stroke"></i></div>
+        <span class="text-sm" style="color:var(--gray-300);">Dynamic Scoring</span>
+      </div>
+      <div class="flex-center flex-col gap-05">
+        <div class="icon-circle"><i class="fas fa-database"></i></div>
+        <span class="text-sm" style="color:var(--gray-300);">Data Structuring</span>
+      </div>
+      <div class="flex-center flex-col gap-05">
+        <div class="icon-circle"><i class="fas fa-arrow-up-right-dots"></i></div>
+        <span class="text-sm" style="color:var(--gray-300);">Lead Prioritization</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SLIDE 10: FINANCIAL PROJECTION FUNNEL ===================== -->
+<section class="slide bg-navy-grad" id="slide-10">
+  <div class="slide-inner" style="gap:1.5rem;">
+    <h2 data-a="1" class="t-display text-xl">Financial Projection Funnel</h2>
+    <p data-a="2" class="t-sub text-md">From 100 leads entering the system</p>
+    <div data-a="3" class="funnel mt-2" id="funnel-projection" style="max-width:460px;">
+      <div class="funnel-step" style="width:100%;background:linear-gradient(90deg,var(--green),var(--green-dark));">
+        <span>100% Answered — Zero Ignored</span>
+      </div>
+      <div class="funnel-step" style="width:80%;background:linear-gradient(90deg,#2D8A42,#1E6B30);margin-top:4px;">
+        <span>80% Filtered Automatically</span>
+      </div>
+      <div class="funnel-step" style="width:50%;background:linear-gradient(90deg,#4CC968,#3DAE56);margin-top:4px;">
+        <span>20% Qualified Leads</span>
+      </div>
+    </div>
+    <div data-a="4" class="card mt-2" style="border-color:rgba(61,174,86,0.25);background:rgba(61,174,86,0.05);max-width:460px;">
+      <p class="t-title text-md" style="color:var(--green);"><i class="fas fa-bullseye"></i>&nbsp; Sales focus on <strong>high-value leads</strong> only</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SLIDE 11: TIME SAVED COMPARISON ===================== -->
+<section class="slide bg-navy-grad grid-bg" id="slide-11">
+  <div class="slide-inner" style="gap:1.5rem;">
+    <h2 data-a="1" class="t-display text-xl">Time Saved Comparison</h2>
+    <div data-a="2" class="w-full mt-2" style="max-width:700px;">
+      <div class="grid-2" style="gap:2rem;">
+        <div class="card" style="text-align:center;">
+          <p class="text-sm" style="color:var(--gray-500);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1rem;">Traditional</p>
+          <div class="chart-container" id="chart-traditional"></div>
+          <div class="flex-center gap-1 mt-1" style="flex-wrap:wrap;">
+            <span class="text-sm" style="color:var(--gray-300);"><i class="fas fa-users"></i> 500 leads</span>
+            <span class="text-sm" style="color:var(--warning);"><i class="fas fa-filter"></i> 100 qualified</span>
+            <span class="text-sm" style="color:var(--danger);"><i class="fas fa-handshake"></i> 20 conversions</span>
+          </div>
+          <p class="t-title text-lg mt-1" style="color:var(--warning);"><i class="fas fa-clock"></i> 8 Hours</p>
+        </div>
+        <div class="card" style="text-align:center;border-color:rgba(61,174,86,0.2);background:rgba(61,174,86,0.03);">
+          <p class="text-sm" style="color:var(--green);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1rem;">AI-Based</p>
+          <div class="chart-container" id="chart-ai"></div>
+          <div class="flex-center gap-1 mt-1" style="flex-wrap:wrap;">
+            <span class="text-sm" style="color:var(--gray-300);"><i class="fas fa-users"></i> 500 leads</span>
+            <span class="text-sm" style="color:var(--green);"><i class="fas fa-filter"></i> 100 qualified</span>
+            <span class="text-sm" style="color:var(--green-bright);"><i class="fas fa-handshake"></i> 40 conversions</span>
+          </div>
+          <p class="t-title text-lg mt-1" style="color:var(--green);"><i class="fas fa-clock"></i> 1 Hour</p>
+        </div>
+      </div>
+    </div>
+    <div data-a="3" class="flex-center gap-3 mt-2" style="flex-wrap:wrap;">
+      <div class="card" style="padding:1rem 1.5rem;background:rgba(61,174,86,0.06);border-color:rgba(61,174,86,0.2);">
+        <span class="t-display text-lg" style="color:var(--green);">+100%</span>
+        <span class="text-sm" style="color:var(--gray-300);display:block;">Conversion Increase</span>
+      </div>
+      <div class="card" style="padding:1rem 1.5rem;background:rgba(61,174,86,0.04);border-color:rgba(61,174,86,0.15);">
+        <span class="t-display text-lg" style="color:var(--green-bright);">87%</span>
+        <span class="text-sm" style="color:var(--gray-300);display:block;">Time Reduction</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SLIDE 12: LOAN CONVERSION SPEED ===================== -->
+<section class="slide bg-navy-grad" id="slide-12">
+  <div class="slide-inner" style="gap:2rem;">
+    <h2 data-a="1" class="t-display text-xl">Loan Conversion Speed</h2>
+    <div data-a="2" class="w-full mt-2" style="max-width:600px;">
+      <div style="display:flex;flex-direction:column;gap:1.5rem;">
+        <div>
+          <div class="flex-center" style="justify-content:space-between;margin-bottom:0.5rem;">
+            <span class="text-sm" style="color:var(--gray-300);"><i class="fas fa-user-clock"></i> Traditional</span>
+            <span class="t-title text-lg" style="color:var(--warning);">15 days</span>
+          </div>
+          <div class="compare-track">
+            <div class="compare-fill" id="bar-traditional" style="width:0%;background:linear-gradient(90deg,var(--warning),#cc8800);"></div>
+          </div>
+        </div>
+        <div>
+          <div class="flex-center" style="justify-content:space-between;margin-bottom:0.5rem;">
+            <span class="text-sm" style="color:var(--gray-300);"><i class="fas fa-robot"></i> AI-Based</span>
+            <span class="t-title text-lg" style="color:var(--green);">10 days</span>
+          </div>
+          <div class="compare-track">
+            <div class="compare-fill" id="bar-ai" style="width:0%;background:linear-gradient(90deg,var(--green),var(--green-bright));"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div data-a="3" class="card mt-1" style="padding:1.5rem 2.5rem;background:rgba(61,174,86,0.06);border-color:rgba(61,174,86,0.2);">
+      <span class="t-display text-xxl" style="color:var(--green);">33%</span>
+      <span class="text-md" style="color:var(--gray-300);display:block;">Faster Loan Conversion</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SLIDE 13: 15 AI AGENTS ===================== -->
+<section class="slide bg-navy-grad grid-bg mesh-bg" id="slide-13">
+  <div class="slide-inner" style="gap:1rem; flex-direction:row; align-items:flex-start; justify-content:center; max-width:1400px;">
+    <div style="flex:1; display:flex; flex-direction:column; gap:1rem; align-items:center;">
+      <div data-a="1" class="chip">Chapter 4 — Implementation Strategy</div>
+      <h2 data-a="2" class="t-display text-xl" style="text-align:center;">Architecture a 15 Agents IA</h2>
+      <p data-a="3" class="t-sub text-md" style="text-align:center;">Moteur multi-agents, structure par role metier</p>
+      <div data-a="4" class="agent-network" id="agent-network" style="width:280px; height:280px;">
+        <svg id="network-svg" viewBox="0 0 340 340"></svg>
+        <div class="center-node"><i class="fas fa-brain"></i></div>
+      </div>
+    </div>
+    <div style="flex:1.2; display:flex; flex-direction:column; gap:0.6rem; max-width:500px;">
+      <div data-a="5" class="card" style="padding:0.8rem 1rem;">
+        <p class="t-title text-sm" style="color:var(--green);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem;">Agents coeur (3)</p>
+        <p class="text-sm" style="color:var(--gray-300);line-height:1.6;">Orchestrateur, Consultation, Finalisation</p>
+      </div>
+      <div data-a="6" class="card" style="padding:0.8rem 1rem;">
+        <p class="t-title text-sm" style="color:var(--green);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem;">Agents profil (6)</p>
+        <p class="text-sm" style="color:var(--gray-300);line-height:1.6;">CDI, CDD, Professionnel, TRE, Retraite, Inactif</p>
+      </div>
+      <div data-a="7" class="card" style="padding:0.8rem 1rem;">
+        <p class="t-title text-sm" style="color:var(--green);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem;">Agents services (6)</p>
+        <p class="text-sm" style="color:var(--gray-300);line-height:1.6;">Intention, Credit a la consommation, Credit personnel, Credit auto, Credit immobilier, BNPL</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SLIDE 14: INTEGRATION TIMELINE ===================== -->
+<section class="slide bg-navy-grad" id="slide-14">
+  <div class="slide-inner" style="gap:2rem;">
+    <h2 data-a="1" class="t-display text-xl">Integration Timeline</h2>
+    <div data-a="2" class="w-full mt-2" style="max-width:800px;">
+      <div class="timeline-h">
+        <div class="timeline-node">
+          <div class="timeline-dot"></div>
+          <div class="icon-circle" style="width:52px;height:52px;margin-top:0.5rem;"><i class="fas fa-database"></i></div>
+          <span class="t-title text-md text-green">Month 1-2</span>
+          <span class="text-sm" style="color:var(--gray-300);text-align:center;line-height:1.5;">Collecte des donnees<br>Preparation de la base de connaissances<br>Mapping des criteres financiers</span>
+        </div>
+        <div class="timeline-node">
+          <div class="timeline-dot"></div>
+          <div class="icon-circle" style="width:52px;height:52px;margin-top:0.5rem;"><i class="fas fa-tools"></i></div>
+          <span class="t-title text-md text-green">Month 3-4</span>
+          <span class="text-sm" style="color:var(--gray-300);text-align:center;line-height:1.5;">Integration et design systeme<br>Deploiement pilote<br>Tests internes et calibration des agents</span>
+        </div>
+        <div class="timeline-node">
+          <div class="timeline-dot"></div>
+          <div class="icon-circle" style="width:52px;height:52px;margin-top:0.5rem;background:rgba(61,174,86,0.15);color:var(--green);border-color:rgba(61,174,86,0.25);"><i class="fas fa-rocket"></i></div>
+          <span class="t-title text-md" style="color:var(--green-bright);">Month 5-6</span>
+          <span class="text-sm" style="color:var(--gray-300);text-align:center;line-height:1.5;">Lancement en production<br>sur canaux selectionnes<br>Monitoring et optimisation continue</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SLIDE 15: TESTING PHASE RESULTS ===================== -->
+<section class="slide bg-navy-grad grid-bg mesh-bg" id="slide-15">
+  <div class="slide-inner" style="gap:1.5rem;">
+    <div data-a="1" class="chip">Chapter 5 — Testing Phase Results</div>
+    <h2 data-a="2" class="t-display text-xl">Proven in the Field</h2>
+    <div data-a="3" class="grid-3 mt-2" style="max-width:700px;">
+      <div class="card" style="text-align:center;padding:2rem 1rem;">
+        <span class="t-display" style="font-size:clamp(2rem,5vw,3.2rem);color:var(--green);" data-counter="5000">0</span><span class="t-display text-green" style="font-size:clamp(1.5rem,3vw,2rem);">+</span>
+        <p class="text-sm mt-1" style="color:var(--gray-300);">Minutes of<br>Conversation</p>
+      </div>
+      <div class="card" style="text-align:center;padding:2rem 1rem;">
+        <span class="t-display" style="font-size:clamp(2rem,5vw,3.2rem);color:var(--green);" data-counter="200">0</span><span class="t-display text-green" style="font-size:clamp(1.5rem,3vw,2rem);">+</span>
+        <p class="text-sm mt-1" style="color:var(--gray-300);">Unique<br>Users</p>
+      </div>
+      <div class="card" style="text-align:center;padding:2rem 1rem;">
+        <span class="t-display" style="font-size:clamp(2rem,5vw,3.2rem);color:var(--green);" data-counter="10">0</span><span class="t-display text-green" style="font-size:clamp(1.5rem,3vw,2rem);"> min</span>
+        <p class="text-sm mt-1" style="color:var(--gray-300);">Average<br>Conversation</p>
+      </div>
+    </div>
+    <div data-a="4" class="card mt-2" style="border-color:rgba(61,174,86,0.2);background:rgba(61,174,86,0.04);max-width:400px;">
+      <p class="t-title text-md text-green"><i class="fas fa-chart-line"></i>&nbsp; Deep engagement proven</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SLIDE 16: RESPONSE TIME ===================== -->
+<section class="slide bg-navy-grad" id="slide-16">
+  <div class="slide-inner" style="gap:1.5rem;">
+    <div data-a="1" class="chip">Chapter 6 — Performance KPIs</div>
+    <h2 data-a="2" class="t-display text-xl">Response Time</h2>
+    <div data-a="3" class="chart-container mt-2" style="max-width:300px;">
+      <svg id="gauge-svg" viewBox="0 0 300 200"></svg>
+    </div>
+    <div data-a="4">
+      <span class="t-display text-stat text-green text-glow" id="gauge-value">0.2-0.6</span>
+      <span class="t-display text-xl" style="color:var(--gray-300);">seconds</span>
+    </div>
+    <p data-a="5" class="t-sub text-md">Typical response window under production load</p>
+  </div>
+</section>
+
+<!-- ===================== SLIDE 17: CONVERSATION HANDLING ===================== -->
+<section class="slide bg-navy-grad" id="slide-17">
+  <div class="slide-inner" style="gap:1.5rem;">
+    <h2 data-a="1" class="t-display text-xl">Conversation Handling Rate</h2>
+    <div data-a="2" class="chart-container mt-2" style="max-width:280px;">
+      <svg id="pie-svg" viewBox="0 0 280 280"></svg>
+    </div>
+    <div data-a="3" class="flex-center gap-3 mt-1">
+      <div class="flex-center gap-05">
+        <div style="width:12px;height:12px;border-radius:3px;background:var(--green);"></div>
+        <span class="text-sm" style="color:var(--gray-300);">95% AI Handled</span>
+      </div>
+      <div class="flex-center gap-05">
+        <div style="width:12px;height:12px;border-radius:3px;background:var(--navy-light);border:1px solid var(--gray-500);"></div>
+        <span class="text-sm" style="color:var(--gray-300);">5% Human Escalation</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SLIDE 18: SUCCESS EVOLUTION ===================== -->
+<section class="slide bg-navy-grad grid-bg" id="slide-18">
+  <div class="slide-inner" style="gap:1.5rem;">
+    <h2 data-a="1" class="t-display text-xl">Conversation Success Evolution</h2>
+    <div data-a="2" class="chart-container mt-2" style="max-width:620px;">
+      <svg id="exp-svg" viewBox="0 0 620 300"></svg>
+    </div>
+    <div data-a="3" class="flex-center gap-2 mt-1" style="flex-wrap:wrap;">
+      <div class="flex-center gap-05">
+        <div style="width:10px;height:10px;border-radius:50%;background:var(--warning);"></div>
+        <span class="text-sm" style="color:var(--gray-300);">Phase 1 — Single Agent</span>
+      </div>
+      <div class="flex-center gap-05">
+        <div style="width:10px;height:10px;border-radius:50%;background:var(--green);"></div>
+        <span class="text-sm" style="color:var(--gray-300);">Phase 2 — Multi-Agent</span>
+      </div>
+      <div class="flex-center gap-05">
+        <div style="width:10px;height:10px;border-radius:50%;background:var(--green-bright);"></div>
+        <span class="text-sm" style="color:var(--gray-300);">Phase 3 — Optimization</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SLIDE 19: YOUR NEXT STEP ===================== -->
+<section class="slide bg-navy-grad" id="slide-19">
+  <div class="slide-inner" style="gap:2rem;">
+    <h2 data-a="1" class="t-display text-xl">Your Next Step</h2>
+    <div data-a="2" class="ai-brain" style="width:160px;height:160px;">
+      <div class="ring ring-1"></div>
+      <div class="ring ring-2" style="inset:20px;"></div>
+      <div class="ring ring-3" style="inset:40px;"></div>
+      <div class="core" style="inset:56px;font-size:1.5rem;"><i class="fas fa-brain"></i></div>
+    </div>
+    <p data-a="3" class="t-title text-lg" style="max-width:780px;color:var(--gray-100);line-height:1.5;">
+      Yassmine is ready. Now customize your own banking version with your policies, your products, and your selected channels.
+    </p>
+    <div data-a="4" class="flex-center gap-1" style="flex-wrap:wrap;">
+      <span class="chip">White-label ready</span>
+      <span class="chip">Bank policy customization</span>
+      <span class="chip">Omnichannel deployment</span>
+      <span class="chip" style="background:rgba(61,174,86,0.18);border-color:rgba(61,174,86,0.35);">Start your pilot now</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SLIDE 20: CLOSING ===================== -->
+<section class="slide bg-dark-drama" id="slide-20">
+  <div class="particles" id="particles-close"></div>
+  <div class="slide-inner" style="gap:1.1rem;">
+    <div data-a="1" style="width:60px;height:3px;background:linear-gradient(90deg,var(--green),var(--green-bright));border-radius:2px;"></div>
+    <h2 data-a="2" class="t-display text-xl" style="max-width:760px;line-height:1.25;">
+      Yassmine is not replacing humans.<br>
+      <span class="text-green">Yassmine is protecting human time.</span>
+    </h2>
+    <div data-a="3" class="grid-3" style="max-width:900px;gap:0.9rem;">
+      <div class="card" style="padding:0.9rem 1rem;">
+        <div class="flex-center gap-05" style="justify-content:flex-start;"><i class="fas fa-check-circle" style="color:var(--green);"></i><span class="text-sm" style="color:var(--gray-300);">Every qualified lead is captured</span></div>
+      </div>
+      <div class="card" style="padding:0.9rem 1rem;">
+        <div class="flex-center gap-05" style="justify-content:flex-start;"><i class="fas fa-check-circle" style="color:var(--green);"></i><span class="text-sm" style="color:var(--gray-300);">Sales time stays focused on high-value prospects</span></div>
+      </div>
+      <div class="card" style="padding:0.9rem 1rem;">
+        <div class="flex-center gap-05" style="justify-content:flex-start;"><i class="fas fa-check-circle" style="color:var(--green);"></i><span class="text-sm" style="color:var(--gray-300);">Every customer receives a timely response</span></div>
+      </div>
+    </div>
+    <div data-a="4" class="divider mt-1"></div>
+    <p data-a="5" class="t-title text-lg text-green">Fast. Intelligent. Prioritized. Data-Driven.</p>
+    <div data-a="6" class="flex-center gap-2 mt-1" style="flex-wrap:wrap;">
+      <div class="flex-center gap-1">
+        <img src="https://pfst.cf2.poecdn.net/base/image/19a90275158dd607a734a01009e0d525f6a67516991207f72d4d7f133ce37262?w=121&amp;h=113" alt="Solugent" style="width:28px;height:28px;border-radius:50%;">
+        <span class="chip" style="background:rgba(61,174,86,0.08);">Solugent</span>
+      </div>
+      <span class="text-md" style="color:var(--green);">×</span>
+      <div class="flex-center gap-1">
+        <img src="https://pfst.cf2.poecdn.net/base/image/bbee76bdc2fbefe41e1034f78928b625efaf9097202c07e0f81efe7562db4507?w=904&amp;h=659" alt="EasyBank" style="height:24px;width:auto;object-fit:contain;">
+        <span class="chip" style="background:rgba(61,174,86,0.08);">EasyBank</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /deck -->
+
+<!-- NAVIGATION -->
+<div class="progress-track"><div class="progress-fill" id="progress"></div></div>
+<div class="nav-bar">
+  <button class="nav-btn" id="btn-prev" aria-label="Previous slide"><i class="fas fa-chevron-left"></i></button>
+  <span class="nav-counter" id="counter">1 / 23</span>
+  <button class="nav-btn" id="btn-next" aria-label="Next slide"><i class="fas fa-chevron-right"></i></button>
+</div>
+
+<script>
+(function() {
+  "use strict";
+
+  var slides = document.querySelectorAll(".slide");
+  var totalSlides = slides.length;
+  var current = 0;
+  var progress = document.getElementById("progress");
+  var counter = document.getElementById("counter");
+  var btnPrev = document.getElementById("btn-prev");
+  var btnNext = document.getElementById("btn-next");
+  var animatedSlides = {};
+
+  function updateUI() {
+    counter.textContent = (current + 1) + " / " + totalSlides;
+    progress.style.width = ((current + 1) / totalSlides * 100) + "%";
+  }
+
+  function goTo(n) {
+    if (n < 0 || n >= totalSlides || n === current) return;
+    slides[current].classList.remove("active");
+    current = n;
+    slides[current].classList.add("active");
+    updateUI();
+    onSlideEnter(current);
+  }
+
+  btnPrev.addEventListener("click", function() { goTo(current - 1); });
+  btnNext.addEventListener("click", function() { goTo(current + 1); });
+
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === " ") { e.preventDefault(); goTo(current + 1); }
+    if (e.key === "ArrowLeft" || e.key === "ArrowUp") { e.preventDefault(); goTo(current - 1); }
+    if (e.key === "Home") { e.preventDefault(); goTo(0); }
+    if (e.key === "End") { e.preventDefault(); goTo(totalSlides - 1); }
+  });
+
+  var touchStartX = 0;
+  var touchStartY = 0;
+  document.addEventListener("touchstart", function(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  document.addEventListener("touchend", function(e) {
+    var dx = touchStartX - e.changedTouches[0].clientX;
+    var dy = touchStartY - e.changedTouches[0].clientY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      if (dx > 0) goTo(current + 1);
+      else goTo(current - 1);
+    }
+  }, { passive: true });
+
+  /* ===== PARTICLES ===== */
+  function createParticles(containerId, count) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+    for (var i = 0; i < count; i++) {
+      var p = document.createElement("div");
+      p.className = "particle";
+      p.style.left = Math.random() * 100 + "%";
+      p.style.top = Math.random() * 100 + "%";
+      p.style.animationDuration = (15 + Math.random() * 25) + "s";
+      p.style.animationDelay = (-Math.random() * 20) + "s";
+      p.style.opacity = String(0.1 + Math.random() * 0.3);
+      p.style.width = p.style.height = (2 + Math.random() * 3) + "px";
+      p.style.animation = "float " + (15 + Math.random() * 25) + "s ease-in-out infinite " + (-Math.random() * 20) + "s";
+      container.appendChild(p);
+    }
+  }
+  createParticles("particles-cover", 30);
+  createParticles("particles-close", 20);
+
+  /* ===== AGENT NETWORK ===== */
+  function buildAgentNetwork() {
+    var svg = document.getElementById("network-svg");
+    var container = document.getElementById("agent-network");
+    if (!svg || !container) return;
+    var cx = 170, cy = 170, r = 140;
+    var agents = 15;
+    var icons = ["fa-comments","fa-clipboard-check","fa-filter","fa-star","fa-database","fa-route",
+                 "fa-bolt","fa-chart-bar","fa-shield","fa-language","fa-calendar","fa-file-invoice",
+                 "fa-user-check","fa-phone","fa-envelope"];
+    for (var i = 0; i < agents; i++) {
+      var angle = (i / agents) * Math.PI * 2 - Math.PI / 2;
+      var nx = cx + Math.cos(angle) * r;
+      var ny = cy + Math.sin(angle) * r;
+      var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("x1", String(cx));
+      line.setAttribute("y1", String(cy));
+      line.setAttribute("x2", String(nx));
+      line.setAttribute("y2", String(ny));
+      line.setAttribute("class", "network-line");
+      line.style.animationDelay = (i * 0.2) + "s";
+      svg.appendChild(line);
+      var node = document.createElement("div");
+      node.className = "agent-node";
+      node.style.left = (nx / 340 * 100) + "%";
+      node.style.top = (ny / 340 * 100) + "%";
+      node.style.transform = "translate(-50%, -50%)";
+      node.innerHTML = '<i class="fas ' + icons[i] + '"></i>';
+      container.appendChild(node);
+    }
+  }
+  buildAgentNetwork();
+
+  /* ===== GAUGE CHART ===== */
+  function drawGauge() {
+    var svg = document.getElementById("gauge-svg");
+    if (!svg) return;
+    svg.innerHTML = "";
+    var arcBg = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    arcBg.setAttribute("d", describeArc(150, 150, 100, -135, 135));
+    arcBg.setAttribute("fill", "none");
+    arcBg.setAttribute("stroke", "rgba(255,255,255,0.06)");
+    arcBg.setAttribute("stroke-width", "18");
+    arcBg.setAttribute("stroke-linecap", "round");
+    svg.appendChild(arcBg);
+    var arcFill = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    arcFill.setAttribute("d", describeArc(150, 150, 100, -135, -135));
+    arcFill.setAttribute("fill", "none");
+    arcFill.setAttribute("stroke", "url(#gaugeGrad)");
+    arcFill.setAttribute("stroke-width", "18");
+    arcFill.setAttribute("stroke-linecap", "round");
+    arcFill.setAttribute("id", "gauge-arc");
+    svg.appendChild(arcFill);
+    var defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+    var grad = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient");
+    grad.setAttribute("id", "gaugeGrad");
+    var s1 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+    s1.setAttribute("offset", "0%");
+    s1.setAttribute("stop-color", "#4CC968");
+    var s2 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+    s2.setAttribute("offset", "100%");
+    s2.setAttribute("stop-color", "#3DAE56");
+    grad.appendChild(s1);
+    grad.appendChild(s2);
+    defs.appendChild(grad);
+    svg.insertBefore(defs, svg.firstChild);
+  }
+
+  function polarToCartesian(cx, cy, r, angleDeg) {
+    var rad = (angleDeg - 90) * Math.PI / 180;
+    return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+  }
+  function describeArc(cx, cy, r, startAngle, endAngle) {
+    var start = polarToCartesian(cx, cy, r, endAngle);
+    var end = polarToCartesian(cx, cy, r, startAngle);
+    var large = endAngle - startAngle <= 180 ? "0" : "1";
+    return "M " + start.x + " " + start.y + " A " + r + " " + r + " 0 " + large + " 0 " + end.x + " " + end.y;
+  }
+
+  function animateGauge() {
+    var targetAngle = -135 + (270 * 0.67);
+    var arc = document.getElementById("gauge-arc");
+    var valEl = document.getElementById("gauge-value");
+    if (!arc || !valEl) return;
+    var startAngle = -135;
+    var startTime = null;
+    var duration = 1500;
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      var pct = Math.min((ts - startTime) / duration, 1);
+      var eased = 1 - Math.pow(1 - pct, 3);
+      var curAngle = startAngle + (targetAngle - startAngle) * eased;
+      arc.setAttribute("d", describeArc(150, 150, 100, -135, curAngle));
+      valEl.textContent = (0.6 * eased).toFixed(1);
+      if (pct < 1) requestAnimationFrame(step);
+      else valEl.textContent = "0.2-0.6";
+    }
+    requestAnimationFrame(step);
+  }
+  drawGauge();
+
+  /* ===== PIE CHART ===== */
+  function drawPie() {
+    var svg = document.getElementById("pie-svg");
+    if (!svg) return;
+    svg.innerHTML = "";
+    var r = 100;
+    var cx = 140, cy = 140;
+    var circumference = 2 * Math.PI * r;
+    var bgCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    bgCircle.setAttribute("cx", String(cx));
+    bgCircle.setAttribute("cy", String(cy));
+    bgCircle.setAttribute("r", String(r));
+    bgCircle.setAttribute("fill", "none");
+    bgCircle.setAttribute("stroke", "rgba(31,45,58,1)");
+    bgCircle.setAttribute("stroke-width", "44");
+    svg.appendChild(bgCircle);
+    var aiCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    aiCircle.setAttribute("cx", String(cx));
+    aiCircle.setAttribute("cy", String(cy));
+    aiCircle.setAttribute("r", String(r));
+    aiCircle.setAttribute("fill", "none");
+    aiCircle.setAttribute("stroke", "#3DAE56");
+    aiCircle.setAttribute("stroke-width", "44");
+    aiCircle.setAttribute("stroke-dasharray", "0 " + circumference);
+    aiCircle.setAttribute("stroke-linecap", "round");
+    aiCircle.setAttribute("transform", "rotate(-90 " + cx + " " + cy + ")");
+    aiCircle.setAttribute("id", "pie-ai");
+    svg.appendChild(aiCircle);
+    var text95 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text95.setAttribute("x", String(cx));
+    text95.setAttribute("y", String(cy + 5));
+    text95.setAttribute("text-anchor", "middle");
+    text95.setAttribute("fill", "#3DAE56");
+    text95.setAttribute("font-size", "42");
+    text95.setAttribute("font-family", "Arial, Helvetica, sans-serif");
+    text95.setAttribute("font-weight", "800");
+    text95.setAttribute("id", "pie-text");
+    text95.textContent = "0%";
+    svg.appendChild(text95);
+    var textLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    textLabel.setAttribute("x", String(cx));
+    textLabel.setAttribute("y", String(cy + 30));
+    textLabel.setAttribute("text-anchor", "middle");
+    textLabel.setAttribute("fill", "#A0AEA5");
+    textLabel.setAttribute("font-size", "13");
+    textLabel.setAttribute("font-family", "Arial, Helvetica, sans-serif");
+    textLabel.textContent = "AI Handled";
+    svg.appendChild(textLabel);
+  }
+
+  function animatePie() {
+    var circle = document.getElementById("pie-ai");
+    var textEl = document.getElementById("pie-text");
+    if (!circle || !textEl) return;
+    var r = 100;
+    var circumference = 2 * Math.PI * r;
+    var target = 0.95 * circumference;
+    var startTime = null;
+    var duration = 1400;
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      var pct = Math.min((ts - startTime) / duration, 1);
+      var eased = 1 - Math.pow(1 - pct, 3);
+      circle.setAttribute("stroke-dasharray", (target * eased) + " " + circumference);
+      textEl.textContent = Math.round(95 * eased) + "%";
+      if (pct < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  drawPie();
+
+  /* ===== EXPONENTIAL GRAPH ===== */
+  function drawExpGraph() {
+    var svg = document.getElementById("exp-svg");
+    if (!svg) return;
+    svg.innerHTML = "";
+    var w = 620, h = 300;
+    var padL = 50, padR = 30, padT = 20, padB = 50;
+    var gw = w - padL - padR, gh = h - padT - padB;
+
+    for (var i = 0; i <= 4; i++) {
+      var yy = padT + gh - (i / 4) * gh;
+      var gridLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      gridLine.setAttribute("x1", String(padL));
+      gridLine.setAttribute("y1", String(yy));
+      gridLine.setAttribute("x2", String(w - padR));
+      gridLine.setAttribute("y2", String(yy));
+      gridLine.setAttribute("stroke", "rgba(255,255,255,0.05)");
+      svg.appendChild(gridLine);
+      var label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      label.setAttribute("x", String(padL - 8));
+      label.setAttribute("y", String(yy + 4));
+      label.setAttribute("text-anchor", "end");
+      label.setAttribute("fill", "#64756A");
+      label.setAttribute("font-size", "11");
+      label.setAttribute("font-family", "Arial, Helvetica, sans-serif");
+      label.textContent = (i * 25) + "%";
+      svg.appendChild(label);
+    }
+
+    var phases = [
+      { x: padL + gw * 0.15, label: "Phase 1", sub: "Single Agent", color: "#E5A100" },
+      { x: padL + gw * 0.48, label: "Phase 2", sub: "Multi-Agent", color: "#3DAE56" },
+      { x: padL + gw * 0.82, label: "Phase 3", sub: "Optimization", color: "#4CC968" }
+    ];
+    phases.forEach(function(ph) {
+      var t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      t.setAttribute("x", String(ph.x));
+      t.setAttribute("y", String(h - 8));
+      t.setAttribute("text-anchor", "middle");
+      t.setAttribute("fill", ph.color);
+      t.setAttribute("font-size", "11");
+      t.setAttribute("font-family", "Arial, Helvetica, sans-serif");
+      t.setAttribute("font-weight", "700");
+      t.textContent = ph.label;
+      svg.appendChild(t);
+      var t2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      t2.setAttribute("x", String(ph.x));
+      t2.setAttribute("y", String(h + 6));
+      t2.setAttribute("text-anchor", "middle");
+      t2.setAttribute("fill", "#64756A");
+      t2.setAttribute("font-size", "9");
+      t2.setAttribute("font-family", "Arial, Helvetica, sans-serif");
+      t2.textContent = ph.sub;
+      svg.appendChild(t2);
+    });
+
+    var div1x = padL + gw * 0.33;
+    var div2x = padL + gw * 0.66;
+    [div1x, div2x].forEach(function(dx) {
+      var dline = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      dline.setAttribute("x1", String(dx));
+      dline.setAttribute("y1", String(padT));
+      dline.setAttribute("x2", String(dx));
+      dline.setAttribute("y2", String(padT + gh));
+      dline.setAttribute("stroke", "rgba(255,255,255,0.08)");
+      dline.setAttribute("stroke-dasharray", "4 4");
+      svg.appendChild(dline);
+    });
+
+    var points = [];
+    var numPoints = 60;
+    for (var j = 0; j <= numPoints; j++) {
+      var t = j / numPoints;
+      var val;
+      if (t <= 0.33) {
+        val = 0.40 * Math.pow(t / 0.33, 1.3);
+      } else if (t <= 0.66) {
+        var localT = (t - 0.33) / 0.33;
+        val = 0.40 + localT * 0.25;
+      } else {
+        var localT2 = (t - 0.66) / 0.34;
+        val = 0.65 + 0.30 * (1 - Math.pow(1 - localT2, 2.5));
+      }
+      var px = padL + t * gw;
+      var py = padT + gh - val * gh;
+      points.push(px + "," + py);
+    }
+
+    var defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+    var fillGrad = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient");
+    fillGrad.setAttribute("id", "expFillGrad");
+    fillGrad.setAttribute("x1", "0");
+    fillGrad.setAttribute("y1", "0");
+    fillGrad.setAttribute("x2", "0");
+    fillGrad.setAttribute("y2", "1");
+    var gs1 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+    gs1.setAttribute("offset", "0%");
+    gs1.setAttribute("stop-color", "#3DAE56");
+    gs1.setAttribute("stop-opacity", "0.2");
+    var gs2 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+    gs2.setAttribute("offset", "100%");
+    gs2.setAttribute("stop-color", "#3DAE56");
+    gs2.setAttribute("stop-opacity", "0");
+    fillGrad.appendChild(gs1);
+    fillGrad.appendChild(gs2);
+    defs.appendChild(fillGrad);
+
+    var lineGrad = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient");
+    lineGrad.setAttribute("id", "expLineGrad");
+    lineGrad.setAttribute("x1", "0");
+    lineGrad.setAttribute("y1", "0");
+    lineGrad.setAttribute("x2", "1");
+    lineGrad.setAttribute("y2", "0");
+    var ls1 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+    ls1.setAttribute("offset", "0%");
+    ls1.setAttribute("stop-color", "#E5A100");
+    var ls2 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+    ls2.setAttribute("offset", "40%");
+    ls2.setAttribute("stop-color", "#3DAE56");
+    var ls3 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+    ls3.setAttribute("offset", "100%");
+    ls3.setAttribute("stop-color", "#4CC968");
+    lineGrad.appendChild(ls1);
+    lineGrad.appendChild(ls2);
+    lineGrad.appendChild(ls3);
+    defs.appendChild(lineGrad);
+    svg.appendChild(defs);
+
+    var areaPath = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+    var areaPoints = padL + "," + (padT + gh) + " " + points.join(" ") + " " + (padL + gw) + "," + (padT + gh);
+    areaPath.setAttribute("points", areaPoints);
+    areaPath.setAttribute("fill", "url(#expFillGrad)");
+    areaPath.setAttribute("id", "exp-area");
+    areaPath.style.opacity = "0";
+    svg.appendChild(areaPath);
+
+    var polyline = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+    polyline.setAttribute("points", points.join(" "));
+    polyline.setAttribute("fill", "none");
+    polyline.setAttribute("stroke", "url(#expLineGrad)");
+    polyline.setAttribute("stroke-width", "3");
+    polyline.setAttribute("stroke-linecap", "round");
+    polyline.setAttribute("stroke-linejoin", "round");
+    polyline.setAttribute("class", "exp-line");
+    svg.appendChild(polyline);
+
+    var keyPoints = [
+      { t: 0, val: 0, label: "0%" },
+      { t: 0.33, val: 0.40, label: "40%" },
+      { t: 0.66, val: 0.65, label: "65%" },
+      { t: 1, val: 0.95, label: "95%" }
+    ];
+    keyPoints.forEach(function(kp) {
+      var kx = padL + kp.t * gw;
+      var ky = padT + gh - kp.val * gh;
+      var dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      dot.setAttribute("cx", String(kx));
+      dot.setAttribute("cy", String(ky));
+      dot.setAttribute("r", "5");
+      dot.setAttribute("fill", "#3DAE56");
+      dot.setAttribute("class", "exp-dot");
+      dot.style.opacity = "0";
+      svg.appendChild(dot);
+      var dotLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      dotLabel.setAttribute("x", String(kx));
+      dotLabel.setAttribute("y", String(ky - 12));
+      dotLabel.setAttribute("text-anchor", "middle");
+      dotLabel.setAttribute("fill", "#FFFFFF");
+      dotLabel.setAttribute("font-size", "13");
+      dotLabel.setAttribute("font-family", "Arial, Helvetica, sans-serif");
+      dotLabel.setAttribute("font-weight", "700");
+      dotLabel.setAttribute("class", "exp-dot");
+      dotLabel.style.opacity = "0";
+      dotLabel.textContent = kp.label;
+      svg.appendChild(dotLabel);
+    });
+  }
+
+  function animateExpGraph() {
+    var area = document.getElementById("exp-area");
+    var dots = document.querySelectorAll(".exp-dot");
+    if (area) {
+      setTimeout(function() { area.style.opacity = "1"; area.style.transition = "opacity 1s ease 1s"; }, 100);
+    }
+    dots.forEach(function(dot, i) {
+      setTimeout(function() {
+        dot.style.transition = "opacity 0.5s ease";
+        dot.style.opacity = "1";
+      }, 1200 + i * 300);
+    });
+  }
+  drawExpGraph();
+
+  /* ===== COMPARISON BAR CHARTS ===== */
+  function buildMiniBarChart(containerId, data, colors) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+    var svgNS = "http://www.w3.org/2000/svg";
+    var svgEl = document.createElementNS(svgNS, "svg");
+    svgEl.setAttribute("viewBox", "0 0 200 120");
+    svgEl.style.width = "100%";
+    svgEl.style.height = "auto";
+    var maxVal = Math.max.apply(null, data.map(function(d) { return d.value; }));
+    var barW = 40;
+    var gap = 20;
+    var startX = (200 - (data.length * barW + (data.length - 1) * gap)) / 2;
+    data.forEach(function(d, i) {
+      var barH = (d.value / maxVal) * 90;
+      var x = startX + i * (barW + gap);
+      var rect = document.createElementNS(svgNS, "rect");
+      rect.setAttribute("x", String(x));
+      rect.setAttribute("y", "100");
+      rect.setAttribute("width", String(barW));
+      rect.setAttribute("height", "0");
+      rect.setAttribute("rx", "4");
+      rect.setAttribute("fill", colors[i] || "#3DAE56");
+      rect.setAttribute("data-target-y", String(100 - barH));
+      rect.setAttribute("data-target-h", String(barH));
+      rect.setAttribute("class", "mini-bar-" + containerId);
+      svgEl.appendChild(rect);
+      var lbl = document.createElementNS(svgNS, "text");
+      lbl.setAttribute("x", String(x + barW / 2));
+      lbl.setAttribute("y", "115");
+      lbl.setAttribute("text-anchor", "middle");
+      lbl.setAttribute("fill", "#A0AEA5");
+      lbl.setAttribute("font-size", "9");
+      lbl.setAttribute("font-family", "Arial, Helvetica, sans-serif");
+      lbl.textContent = d.label;
+      svgEl.appendChild(lbl);
+    });
+    container.appendChild(svgEl);
+  }
+
+  buildMiniBarChart("chart-traditional",
+    [{ label: "Leads", value: 500 }, { label: "Qualified", value: 100 }, { label: "Converted", value: 20 }],
+    ["rgba(229,161,0,0.7)", "rgba(229,161,0,0.5)", "rgba(224,59,92,0.6)"]
+  );
+  buildMiniBarChart("chart-ai",
+    [{ label: "Leads", value: 500 }, { label: "Qualified", value: 100 }, { label: "Converted", value: 40 }],
+    ["rgba(61,174,86,0.7)", "rgba(61,174,86,0.5)", "rgba(76,201,104,0.7)"]
+  );
+
+  function animateMiniBars(containerId) {
+    var bars = document.querySelectorAll(".mini-bar-" + containerId);
+    bars.forEach(function(bar, i) {
+      setTimeout(function() {
+        var targetY = parseFloat(bar.getAttribute("data-target-y"));
+        var targetH = parseFloat(bar.getAttribute("data-target-h"));
+        bar.style.transition = "y 0.8s cubic-bezier(0.22,1,0.36,1), height 0.8s cubic-bezier(0.22,1,0.36,1)";
+        bar.setAttribute("y", String(targetY));
+        bar.setAttribute("height", String(targetH));
+      }, i * 150);
+    });
+  }
+
+  /* ===== COUNTERS ===== */
+  function animateCounters(slideEl) {
+    var counters = slideEl.querySelectorAll("[data-counter]");
+    counters.forEach(function(el) {
+      var target = parseInt(el.getAttribute("data-counter"), 10);
+      var duration = 1500;
+      var startTime = null;
+      function step(ts) {
+        if (!startTime) startTime = ts;
+        var pct = Math.min((ts - startTime) / duration, 1);
+        var eased = 1 - Math.pow(1 - pct, 3);
+        el.textContent = Math.round(target * eased).toLocaleString();
+        if (pct < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    });
+  }
+
+  /* ===== LOAN BARS ===== */
+  function animateLoanBars() {
+    var barT = document.getElementById("bar-traditional");
+    var barA = document.getElementById("bar-ai");
+    if (barT) barT.style.width = "100%";
+    if (barA) barA.style.width = "66.7%";
+  }
+
+  /* ===== SLIDE ENTER HANDLER ===== */
+  function onSlideEnter(index) {
+    if (animatedSlides[index]) return;
+    animatedSlides[index] = true;
+
+    if (index === 11) {
+      setTimeout(function() {
+        animateMiniBars("chart-traditional");
+        animateMiniBars("chart-ai");
+      }, 400);
+    }
+    if (index === 12) {
+      setTimeout(animateLoanBars, 400);
+    }
+    if (index === 15) {
+      setTimeout(function() { animateCounters(slides[15]); }, 400);
+    }
+    if (index === 16) {
+      setTimeout(animateGauge, 400);
+    }
+    if (index === 17) {
+      setTimeout(animatePie, 400);
+    }
+    if (index === 18) {
+      setTimeout(animateExpGraph, 400);
+    }
+  }
+
+  /* ===== INIT ===== */
+  updateUI();
+  onSlideEnter(0);
+
+})();
+</script>
+
+
+</body></html>
