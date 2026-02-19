@@ -1644,25 +1644,25 @@ html, body {
     if (animatedSlides[index]) return;
     animatedSlides[index] = true;
 
-    if (index === 11) {
+    if (index === 8) {
       setTimeout(function() {
         animateMiniBars("chart-traditional");
         animateMiniBars("chart-ai");
       }, 400);
     }
-    if (index === 12) {
+    if (index === 9) {
       setTimeout(animateLoanBars, 400);
     }
-    if (index === 15) {
+    if (index === 12) {
       setTimeout(function() { animateCounters(slides[15]); }, 400);
     }
-    if (index === 16) {
+    if (index === 13) {
       setTimeout(animateGauge, 400);
     }
-    if (index === 17) {
+    if (index === 14) {
       setTimeout(animatePie, 400);
     }
-    if (index === 18) {
+    if (index === 15) {
       setTimeout(animateExpGraph, 400);
     }
   }
